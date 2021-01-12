@@ -34,7 +34,7 @@ def setup_training_options(
     snap       = 10, # Snapshot interval: <int>, default = 50 ticks
 
     # Training dataset.
-    data       = /mnt/scratch8TB/mammo/tfrecord_5000, # Training dataset (required): <path>
+    data       = None, # Training dataset (required): <path>
     res        = None, # Override dataset resolution: <int>, default = highest available
     mirror     = None, # Augment dataset with x-flips: <bool>, default = False
 
@@ -58,7 +58,7 @@ def setup_training_options(
     dcap       = None, # Multiplier for discriminator capacity: <float>, default = 1
 
     # Transfer learning.
-    resume     = 'breast/GAN/Result/Windowing/stylegan_lr_0.0002/00005-sgan-mammo-2gpu', # Load previous network: 'noresume' (default), 'ffhq256', 'ffhq512', 'ffhq1024', 'celebahq256', 'lsundog256', <file>, <url>
+    resume     = None, # Load previous network: 'noresume' (default), 'ffhq256', 'ffhq512', 'ffhq1024', 'celebahq256', 'lsundog256', <file>, <url>
     freezed    = None, # Freeze-D: <int>, default = 0 discriminator layers
 ):
     # Initialize dicts.
