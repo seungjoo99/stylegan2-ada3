@@ -20,7 +20,7 @@ import dnnlib.tflib as tflib
 from training import training_loop
 from training import dataset
 from metrics import metric_defaults
-
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
 #----------------------------------------------------------------------------
 
 class UserError(Exception):
