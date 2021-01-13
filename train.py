@@ -45,7 +45,7 @@ def setup_training_options(
     # Base config.
     cfg        = None, # Base config: 'auto' (default), 'stylegan2', 'paper256', 'paper512', 'paper1024', 'cifar', 'cifarbaseline'
     gamma      = None, # Override R1 gamma: <float>, default = depends on cfg
-    kimg       = 100000, # Override training duration: <int>, default = depends on cfg
+    kimg       = 10000, # Override training duration: <int>, default = depends on cfg
 
     # Discriminator augmentation.
     aug        = None, # Augmentation mode: 'ada' (default), 'noaug', 'fixed', 'adarv'
