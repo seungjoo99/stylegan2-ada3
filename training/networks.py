@@ -357,7 +357,7 @@ def G_synthesis(
 
     # Internal details.
     use_noise           = True,         # Enable noise inputs?
-    randomize_noise     = True,         # True = randomize noise inputs every time (non-deterministic), False = read noise inputs from variables.
+    randomize_noise     = False,         # True = randomize noise inputs every time (non-deterministic), False = read noise inputs from variables.
     architecture        = 'skip',       # Architecture: 'orig', 'skip', 'resnet'.
     nonlinearity        = 'lrelu',      # Activation function: 'relu', 'lrelu', etc.
     dtype               = 'float32',    # Data type to use for intermediate activations and outputs.
