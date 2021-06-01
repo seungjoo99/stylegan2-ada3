@@ -16,17 +16,16 @@ import re
 import tensorflow as tf
 import dnnlib
 import dnnlib.tflib as tflib
-
 from training import training_loop
 from training import dataset
 from metrics import metric_defaults
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
 #----------------------------------------------------------------------------
 
 class UserError(Exception):
     pass
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 def setup_training_options(
     # General options (not included in desc).
@@ -43,9 +42,9 @@ def setup_training_options(
     metricdata = None, # Metric dataset (optional): <path>
 
     # Base config.
-    cfg        = None, # Base config: 'auto' (default), 'stylegan2', 'paper256', 'paper512', 'paper1024', 'cifar', 'cifarbaseline'
+    cfg        = 'auto', # Base config: 'auto' (default), 'stylegan2', 'paper256', 'paper512', 'paper1024', 'cifar', 'cifarbaseline'
     gamma      = None, # Override R1 gamma: <float>, default = depends on cfg
-    kimg       = 10000, # Override training duration: <int>, default = depends on cfg
+    kimg       = 1000, # Override training duration: <int>, default = depends on cfg
 
     # Discriminator augmentation.
     aug        = None, # Augmentation mode: 'ada' (default), 'noaug', 'fixed', 'adarv'
@@ -162,7 +161,6 @@ def setup_training_options(
     cfg_specs = {
         'auto':          dict(ref_gpus=-1, kimg=25000,  mb=-1, mbstd=-1, fmaps=-1,  lrate=-0.5,     gamma=-1,   ema=-1,  ramp=0.05, map=8), # populated dynamically based on 'gpus' and 'res'
         'stylegan2':     dict(ref_gpus=8,  kimg=25000,  mb=32, mbstd=4,  fmaps=1,   lrate=0.001,  gamma=10,   ema=10,  ramp=None, map=8), # uses mixed-precision, unlike original StyleGAN2
-        'paper256':      dict(ref_gpus=8,  kimg=25000,  mb=64, mbstd=8,  fmaps=0.5, lrate=0.001, gamma=1,    ema=20,  ramp=None, map=8),
         'paper512':      dict(ref_gpus=8,  kimg=25000,  mb=64, mbstd=8,  fmaps=1,   lrate=0.00125, gamma=0.5,  ema=20,  ramp=None, map=8),
         'paper1024':     dict(ref_gpus=8,  kimg=25000,  mb=32, mbstd=4,  fmaps=1,   lrate=0.001,  gamma=2,    ema=10,  ramp=None, map=8),
         'cifar':         dict(ref_gpus=2,  kimg=100000, mb=64, mbstd=32, fmaps=0.5, lrate=0.00125, gamma=0.01, ema=500, ramp=0.05, map=2),
@@ -178,7 +176,7 @@ def setup_training_options(
         spec.mbstd = min(spec.mb // gpus, 4) # other hyperparams behave more predictably if mbstd group size remains fixed
         spec.fmaps = 1 if res >= 512 else 0.5
         spec.lrate = 0.002 if res >= 1024 else 0.0025
-        spec.gamma = 0.0002 * (res ** 2) / spec.mb # heuristic formula
+        #spec.gamma = 0.0002 * (res ** 2) / spec.mb # heuristic formula
         spec.ema = spec.mb * 10 / 32
 
     args.total_kimg = spec.kimg
@@ -409,7 +407,7 @@ def setup_training_options(
 
     return desc, args
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 def run_training(outdir, seed, dry_run, **hyperparam_options):
     # Setup training options.
@@ -451,7 +449,7 @@ def run_training(outdir, seed, dry_run, **hyperparam_options):
     with dnnlib.util.Logger(os.path.join(training_options.run_dir, 'log.txt')):
         training_loop.training_loop(**training_options)
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 def _str_to_bool(v):
     if isinstance(v, bool):
@@ -467,7 +465,7 @@ def _parse_comma_sep(s):
         return []
     return s.split(',')
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 _cmdline_help_epilog = '''examples:
 
@@ -505,7 +503,7 @@ transfer learning source networks (--resume):
   <path or URL>  Custom network pickle.
 '''
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(
@@ -556,9 +554,10 @@ def main():
         print(f'Error: {err}')
         exit(1)
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 if __name__ == "__main__":
     main()
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+
