@@ -1,5 +1,5 @@
-﻿# Copyright (c) 2020, NVIDIA CORPORATION.  All rights reserved.
-#
+# -*- coding: utf-8 -*-
+# Copyright (c) 2020, NVIDIA CORPORATION.  All rights reserved.
 # NVIDIA CORPORATION and its licensors retain all intellectual property
 # and proprietary rights in and to this software, related documentation
 # and any modifications thereto.  Any use, reproduction, disclosure or
@@ -20,7 +20,7 @@ from dnnlib.tflib.autosummary import autosummary
 
 from training import dataset
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Select size and contents of the image snapshot grids that are exported
 # periodically during training.
 
@@ -62,7 +62,7 @@ def setup_snapshot_image_grid(training_set):
                 labels[x + y * gw] = label[0]
     return (gw, gh), reals, labels
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 def save_image_grid(images, filename, drange, grid_size):
     lo, hi = drange
@@ -73,11 +73,11 @@ def save_image_grid(images, filename, drange, grid_size):
     _N, C, H, W = images.shape
     images = images.reshape(gh, gw, C, H, W)
     images = images.transpose(0, 3, 1, 4, 2)
-    images = images.reshape(gh * H, gw * W, C)
+    images = images.reshape(gh * H, gw * W, C)[:,:,0]
     PIL.Image.fromarray(images, {3: 'RGB', 1: 'L'}[C]).save(filename)
-    
-    
-#----------------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------------
 # Main training script.
 
 def training_loop(
@@ -324,4 +324,4 @@ def training_loop(
     summary_log.close()
     training_set.close()
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
